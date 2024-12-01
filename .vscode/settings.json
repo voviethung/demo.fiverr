@@ -1,0 +1,14 @@
+{
+    "liveSassCompile.settings.useNewCompiler": false,
+    "liveSassCompile.settings.includeItems": [],
+    "liveSassCompile.settings.autoprefix": [],
+    "liveSassCompile.settings.formats": [
+        {
+            "format": "expanded",
+            "extensionName": ".css",
+            "savePath":"",
+            "savePathReplacementPairs": null
+        }
+    ],
+    "CodeGPT.apiKey": "CodeGPT Plus Beta"
+}

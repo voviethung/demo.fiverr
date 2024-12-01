@@ -1,0 +1,13 @@
+# *
+User-agent: *
+Allow: /
+
+# *
+User-agent: *
+Disallow: /secret-page
+
+# Host
+Host: https://shoesshopbc70.vercel.app
+
+# Sitemaps
+Sitemap: https://shoesshopbc70.vercel.app/sitemap.xml
