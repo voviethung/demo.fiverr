@@ -1,24 +1,18 @@
-"use client"
+"use client";
+
 import { Table, Button } from "antd";
-// import type { ColumnsType } from "antd/es/table";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AddJobType from "../../../HOC/JobTypeAdmin/AddJobType";
 import UpdateJobType from "../../../HOC/JobTypeAdmin/UpdateJobType";
-// import { AppDispatch, RootState } from "../../../redux/configStore";
-// import { LoaiCongViec } from "../../../redux/models/JobModel";
-import {
-  delJobTypeApi,
-  delUserApi,
-  getJobTypeApi,
-  getUserApi,
-} from "../../../redux/reducers/adminReducer";
+import { delJobTypeApi, getJobTypeApi } from "../../../redux/reducers/adminReducer";
 
-// type Props = {};
-
-export default function ManageJobType({}) {
+export default function ManageJobType() {
   const { allJobType } = useSelector((state) => state.adminReducer);
   const refUpdateForm = useRef(null);
+  const dispatch = useDispatch();
+
+  // Cấu hình các cột của bảng
   const columns = [
     {
       title: "ID",
@@ -33,41 +27,51 @@ export default function ManageJobType({}) {
     {
       title: "Action",
       dataIndex: "action",
-      key: "x",
-      render: (value, jobtype) => (
+      key: "action",
+      render: (_, jobtype) => (
         <div className="d-flex gap-3">
+          {/* Nút chỉnh sửa */}
           <UpdateJobType jobtype={jobtype} ref={refUpdateForm} />
           <Button
             type="primary"
             onClick={() => {
-              refUpdateForm.current.open();
+              if (refUpdateForm.current) {
+                refUpdateForm.current.open();
+              }
             }}
           >
             View & Edit
           </Button>
+          {/* Nút xóa */}
           <Button
             type="primary"
             danger
             onClick={() => {
-              const action = delJobTypeApi(jobtype.id);
-              dispatch(action);
+              if (jobtype.id) {
+                dispatch(delJobTypeApi(jobtype.id));
+              }
             }}
           >
-            DEL
+            Delete
           </Button>
         </div>
       ),
     },
   ];
 
-  const dispatch = useDispatch();
+  // Lấy danh sách loại công việc khi component được render
   useEffect(() => {
-    dispatch(getJobTypeApi());
-  }, []);
+    if (typeof window !== "undefined") {
+      dispatch(getJobTypeApi());
+    }
+  }, [dispatch]);
+
   return (
     <>
+      {/* Thành phần thêm loại công việc */}
       <AddJobType />
-      <Table columns={columns} dataSource={allJobType} />
+      {/* Hiển thị bảng */}
+      <Table columns={columns} dataSource={allJobType || []} rowKey="id" />
     </>
   );
 }

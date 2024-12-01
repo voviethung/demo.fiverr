@@ -60,7 +60,8 @@ function AdminLayoutWithProvider({ children }) {
     dispatch(getAllCongViecApi());
   }, [dispatch]);
 
-  const role = getStore(ROLE_lOGIN);
+  // const role = getStore(ROLE_lOGIN);
+  const role = typeof window !== "undefined" ? getStore(ROLE_lOGIN) : null;
   if (role !== "USER" && role !== "user") {
     toast.warning("Tài Khoản chưa đủ quyền truy cập Admin!");
     router.push("/login");

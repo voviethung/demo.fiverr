@@ -1,27 +1,18 @@
-"use client"
-import { Button, Space, Table, Tag } from "antd";
-// import type { ColumnsType } from "antd/es/table";
-import React, { useEffect, useRef, useState } from "react";
+"use client";
+
+import { Button, Table } from "antd";
+import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AddService from "../../../HOC/ServiceAdmin/AddService";
 import UpdateService from "../../../HOC/ServiceAdmin/UpdateService";
-import UserUpdate from "../../../HOC/UserUpdate/UserUpdate";
-// import { AppDispatch, RootState } from "../../../redux/configStore";
-// import { ThueCongViec } from "../../../redux/models/JobModel";
-import {
-  delServiceHireApi,
-  getServiceHireApi,
-  getUserApi,
-} from "../../../redux/reducers/adminReducer";
+import { delServiceHireApi, getServiceHireApi } from "../../../redux/reducers/adminReducer";
 
-// type Props = {};
-
-export default function ManageService({}) {
-  const { allServiceHire } = useSelector(
-    (state) => state.adminReducer
-  );
+export default function ManageService() {
+  const { allServiceHire } = useSelector((state) => state.adminReducer);
   const refUpdateForm = useRef(null);
   const dispatch = useDispatch();
+
+  // Cấu hình các cột của bảng
   const columns = [
     {
       title: "ID",
@@ -47,51 +38,61 @@ export default function ManageService({}) {
       title: "Condition",
       key: "hoanThanh",
       dataIndex: "hoanThanh",
-      render: (conditon) => {
-        if (conditon) {
-          return <p className="m-0">Hoàn thành</p>;
-        }
-        return <p className="m-0">Chưa hoàn thành</p>;
-      },
+      render: (condition) =>
+        condition ? (
+          <p className="m-0 text-success">Hoàn thành</p>
+        ) : (
+          <p className="m-0 text-danger">Chưa hoàn thành</p>
+        ),
     },
     {
       title: "Action",
       dataIndex: "action",
-      key: "x",
-      render: (value, service) => (
+      key: "action",
+      render: (_, service) => (
         <div className="d-flex gap-3">
+          {/* Nút chỉnh sửa */}
           <UpdateService service={service} ref={refUpdateForm} />
           <Button
             onClick={() => {
-              refUpdateForm.current.open();
+              if (refUpdateForm.current) {
+                refUpdateForm.current.open();
+              }
             }}
             type="primary"
           >
             View & Edit
           </Button>
+          {/* Nút xóa */}
           <Button
             type="primary"
             danger
             onClick={() => {
-              const action = delServiceHireApi(service.id);
-              dispatch(action);
+              if (service.id) {
+                dispatch(delServiceHireApi(service.id));
+              }
             }}
           >
-            DEL
+            Delete
           </Button>
         </div>
       ),
     },
   ];
 
+  // Lấy danh sách dịch vụ thuê khi component được render
   useEffect(() => {
-    dispatch(getServiceHireApi());
-  }, []);
+    if (typeof window !== "undefined") {
+      dispatch(getServiceHireApi());
+    }
+  }, [dispatch]);
 
   return (
     <>
+      {/* Thành phần thêm dịch vụ */}
       <AddService />
-      <Table columns={columns} dataSource={allServiceHire} />
+      {/* Hiển thị bảng */}
+      <Table columns={columns} dataSource={allServiceHire || []} rowKey="id" />
     </>
   );
 }

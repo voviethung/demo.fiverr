@@ -1,36 +1,27 @@
-"use client"
-import { Button, Input, Space, Table, Tag } from "antd";
-// import type { ColumnsType } from "antd/es/table";
+"use client";
+
+import { Button, Input, Table, Tag } from "antd";
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AddAdmin from "../../../HOC/AddAdmin/AddAdmin";
 import User from "../../../HOC/User/User";
-// import { AppDispatch, RootState } from "../../../redux/configStore";
 import {
   delUserApi,
   getUserApi,
-  getUserSearch,
   searchUserApi,
   userIdApi,
 } from "../../../redux/reducers/adminReducer";
 import { setStore } from "../../../util/setting";
 
-// interface DataType {
-//   key: string;
-//   name: string;
-//   id: number;
-//   phone: string;
-//   gender: boolean;
-//   role: string;
-//   skill: [];
-//   certification: [];
-// }
-
-// Component
-// type Props = {};
-
-export default function ManageUser({}) {
+export default function ManageUser() {
   const refUserDialog = useRef(null);
+  const dispatch = useDispatch();
+
+  // Lấy thông tin từ Redux Store
+  const { userLogin } = useSelector((state) => state.userReducer);
+  const { allUser } = useSelector((state) => state.adminReducer);
+
+  // Cột của bảng
   const columns = [
     {
       title: "ID",
@@ -54,13 +45,11 @@ export default function ManageUser({}) {
       dataIndex: "certification",
       render: (_, { certification }) => (
         <div>
-          {certification?.map((tag) => {
-            return (
-              <Tag className="mt-1" key={tag}>
-                {tag}
-              </Tag>
-            );
-          })}
+          {certification?.map((tag) => (
+            <Tag className="mt-1" key={tag}>
+              {tag}
+            </Tag>
+          ))}
         </div>
       ),
     },
@@ -70,66 +59,67 @@ export default function ManageUser({}) {
       dataIndex: "skill",
       render: (_, { skill }) => (
         <div>
-          {skill?.map((tag) => {
-            return (
-              <Tag className="mt-1" key={tag}>
-                {tag}
-              </Tag>
-            );
-          })}
+          {skill?.map((tag) => (
+            <Tag className="mt-1" key={tag}>
+              {tag}
+            </Tag>
+          ))}
         </div>
       ),
     },
     {
       title: "Action",
       dataIndex: "action",
-      key: "x",
+      key: "action",
       render: (_, { id }) => (
         <div className="d-flex gap-3">
+          {/* Nút View & Edit */}
           <User ref={refUserDialog} id={id} />
           <Button
+            type="primary"
             onClick={() => {
-              // console.log(id);
-              setStore("id_user", id);
-              refUserDialog.current.open();
-              dispatch(userIdApi(id));
+              if (refUserDialog.current) {
+                setStore("id_user", id);
+                refUserDialog.current.open();
+                dispatch(userIdApi(id));
+              }
             }}
           >
             View & Edit
           </Button>
+          {/* Nút Delete */}
           <Button
             type="primary"
             danger
             onClick={() => {
-              // const action = id;
-              // console.log(id);
               dispatch(delUserApi(id));
             }}
           >
-            DEL
+            Delete
           </Button>
         </div>
       ),
     },
   ];
-  //------------ ------------ //
-  const { userLogin } = useSelector((state) => state.userReducer);
-  const { allUser } = useSelector((state) => state.adminReducer);
-  // console.log(allUser);
-  const dispatch = useDispatch();
+
+  // Lấy danh sách người dùng khi component được render
   useEffect(() => {
-    dispatch(getUserApi());
-  }, [userLogin]);
+    if (typeof window !== "undefined") {
+      dispatch(getUserApi());
+    }
+  }, [dispatch, userLogin]);
+
   return (
     <>
+      {/* Thành phần thêm quản trị viên */}
       <AddAdmin />
+      {/* Input tìm kiếm người dùng */}
       <Input
         placeholder="Tìm kiếm thông tin người dùng ..."
         type="text"
         className="inp_search mb-3"
         onChange={(e) => {
-          let key = e.target.value.trim().toLowerCase();
-          console.log(key);
+          const key = e.target.value.trim().toLowerCase();
           if (key) {
             dispatch(searchUserApi(key));
           } else {
@@ -137,20 +127,12 @@ export default function ManageUser({}) {
           }
         }}
       />
-      <Table columns={columns} dataSource={allUser} />
+      {/* Bảng hiển thị danh sách người dùng */}
+      <Table
+        columns={columns}
+        dataSource={allUser || []}
+        rowKey="id" // Đảm bảo mỗi hàng có khóa duy nhất
+      />
     </>
   );
 }
-
-//------------------------- -------------------------------//
-
-// const ManageUser: React.FC = () => {
-//   const { allUser } = useSelector((state: RootState) => state.adminReducer);
-//   console.log(allUser);
-//   const dispatch: AppDispatch = useDispatch();
-//   useEffect(() => {
-//     dispatch(getUserApi());
-//   }, []);
-//   return <Table columns={columns} dataSource={allUser} />;
-// };
-// export default ManageUser;
