@@ -17,7 +17,7 @@ const Categories = async ({ params }) => {
     const renderService = () => {
         return arrCategory.map((service, index) => {
             return (
-                <div className="col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-4" key={service.index}>
+                <div className="col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-4" key={index}>
                     <ServiceCard service={service} />
                 </div>
             );

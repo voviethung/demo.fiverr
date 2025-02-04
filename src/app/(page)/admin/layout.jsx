@@ -1,5 +1,5 @@
 "use client";
-// import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { Layout, message } from "antd";
 import React, { useEffect, useRef, useState } from "react";
@@ -50,6 +50,7 @@ export default function AdminLayout({ children }) {
 
 function AdminLayoutWithProvider({ children }) {
   const [collapsed, setCollapsed] = useState(false);
+  const [isAuthorized, setIsAuthorized] = useState(null);
   const dispatch = useDispatch();
   const refUpdateUserDialog = useRef(null);
   const { userLogin } = useSelector((state) => state.userReducer);
@@ -58,16 +59,21 @@ function AdminLayoutWithProvider({ children }) {
   useEffect(() => {
     dispatch(getProfileApi());
     dispatch(getAllCongViecApi());
-  }, [dispatch]);
 
-  // const role = getStore(ROLE_lOGIN);
-  const role = typeof window !== "undefined" ? getStore(ROLE_lOGIN) : null;
-  if (role !== "USER" && role !== "user") {
-    toast.warning("Tài Khoản chưa đủ quyền truy cập Admin!");
-    router.push("/login");
-    return null;
+    const role = getStore(ROLE_lOGIN);
+    if (role !== "USER" && role !== "user") {
+      toast.warning("Tài Khoản chưa đủ quyền truy cập Admin!");
+      router.push("/login");
+      setIsAuthorized(false);
+    } else {
+      setIsAuthorized(true);
+    }
+  }, [dispatch, router]);
+
+  if (isAuthorized === null) {
+    return <div>Loading...</div>;
   }
-
+  
   return (
     <html lang="en">
       <head>

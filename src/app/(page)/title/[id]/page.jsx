@@ -1,35 +1,10 @@
 import { getChiTietLoaiCongViecAction } from "../../../actions/service/productApi";
 import React from "react";
 import Link from "next/link";
-// import { Helmet } from "react-helmet"; // Import Helmet
-// import { useDispatch, useSelector } from "react-redux";
-// import { NavLink, useParams } from "react-router-dom";
-// import { AppDispatch, RootState } from "../../redux/configStore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { library } from '@fortawesome/fontawesome-svg-core';
-// import { faCirclePlay } from '@fortawesome/free-solid-svg-icons';
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
-// import { DsChiTietLoai, DsNhomChiTietLoai } from "../../redux/models/JobModel";
-// import { getJobTitleDetailApi } from "../../redux/reducers/jobReducer";
-
-// type Props = {};
 library.add(fas);
-
-// export default function JobTitle({}) {
-//   const params: any = useParams();
-//   const dispatch: AppDispatch = useDispatch();
-//   const { jobTitleDetail } = useSelector(
-//     (state: RootState) => state.jobReducer
-//   );
-
-//   let { id } = params;
-//   // console.log("-", jobTitleDetail);
-
-//   useEffect(() => {
-//     dispatch(getJobTitleDetailApi(id));
-//     // console.log("--", jobTitleDetail);
-//   }, [id]);
 
 const JobTitle = async ({ params }) => {
     const id = params.id; // Lấy giá trị 'id' từ đường dẫn động
@@ -37,10 +12,10 @@ const JobTitle = async ({ params }) => {
 
 const renderExploreContent = () => {
     return jobTitleDetail.map((group, index) => (
-        <div key={group.index}> {/* Sử dụng `group.id` nếu có */}
+        <div key={group.id}> {/* Sử dụng `group.id` nếu có */}
             {group.dsNhomChiTietLoai.map((item, index) => {
                 return (
-                    <div key={item.index} className=" item d-inline-block card border-0 shadow-sm px-3 py-2 flex-shrink-0"
+                    <div key={item.id} className=" item d-inline-block card border-0 shadow-sm px-3 py-2 flex-shrink-0"
                     style={{
                         minWidth: '200px',
                         boxShadow: '0px 0px 20px 0px rgba(255,255,255,0)',
@@ -51,7 +26,7 @@ const renderExploreContent = () => {
                         <h1>{item.tenNhom}</h1>
                         {item.dsChiTietLoai.map((chiTiet, index) => {
                             return (
-                                <p key={chiTiet.index}> {/* Sử dụng `chiTiet.id` */}
+                                <p key={chiTiet.id}> {/* Sử dụng `chiTiet.id` */}
                                     <Link href={`/categories/${chiTiet.id}`}>
                                         {chiTiet.tenChiTiet}
                                     </Link>
@@ -66,64 +41,17 @@ const renderExploreContent = () => {
     ));
 };
 
-
-    // const renderExploreContent = () => {
-    //     { jobTitleDetail.map(group) => (
-    //         <div key={group.index}>
-    //             {group.dsNhomChiTietLoai.map(item, index) => {
-    //             return (
-    //             <div className="item" key={item.index}>
-    //                 <img src={item.hinhAnh} alt="..." />
-    //                 <h1>{item.tenNhom}</h1>
-    //                 {item.dsChiTietLoai.map((chiTiet, index) => {
-    //                     return (
-    //                         <p key={chiTiet.index}>
-    //                             <Link to={`/categories/${chiTiet.id}`}>
-    //                                 {chiTiet.tenChiTiet}
-    //                             </Link>
-    //                         </p>
-    //                     );
-    //                 })}
-    //             </div>
-    //             );
-    //         }
-    //     }
-    //         </div>
-    //     )}}
-
-
 return (
     <>
-
-        {/* Helmet SEO Tags */}
-        {/* <Helmet>
-        <title>{jobTitleDetail.tenLoaiCongViec || "Job Title"}</title>
-        <meta
-          name="description"
-          content={`Explore various services under ${jobTitleDetail.tenLoaiCongViec || "this category"}. Find the best freelancers for your needs.`}
-        />
-        <meta
-          name="keywords"
-          content={`freelance, services, ${jobTitleDetail.tenLoaiCongViec}, popular jobs`}
-        />
-        <meta property="og:title" content={jobTitleDetail.tenLoaiCongViec || "Job Title"} />
-        <meta
-          property="og:description"
-          content={`Explore the top services under ${jobTitleDetail.tenLoaiCongViec || "this category"} on our platform.`}
-        />
-        <meta property="og:image" content={jobTitleDetail.hinhAnh || "/default-image.jpg"} />
-        <meta property="og:url" content={window.location.href} />
-        <meta property="og:type" content="website" />
-      </Helmet> */}
       {jobTitleDetail.map((group, index) => (
-        <div key={group.index}>
+        <div key={group.id}>
         <section className="banner-job-title">
             <div className="banner_container">
                 <div className="content">
                     <h1>{group.tenLoaiCongViec}</h1>
                     <p>Designs to make you stand out.</p>
                     <button className="btn btn-outline-light">
-                        <FontAwesomeIcon icon={["far", "circle-play"]} className="fa" />
+                        <FontAwesomeIcon icon={["fas", "circle-play"]} className="fa" />
                         <span>How Fiverr Works</span>
                     </button>
                 </div>

@@ -13,7 +13,7 @@ const Result = async (props) => {
     const renderService = () => {
         return arrResult.map((service, index) => {
             return (
-                <div className="col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-4" key={service.index}>
+                <div className="col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-4" key={index}>
                     <ServiceCard service={service} />
                 </div>
             );
@@ -22,32 +22,6 @@ const Result = async (props) => {
 
     return (
         <>
-            {/* Helmet for SEO
-            <Helmet>
-                <title>Results for "{params.name}" - Find Services | Fiverr Clone</title>
-                <meta
-                    name="description"
-                    content={`Explore results for "${params.name}". Find the best freelancers and services for your needs. We provide a wide range of categories to help you succeed.`}
-                />
-                <meta
-                    name="keywords"
-                    content={`freelance, services, search results, ${params.name}, hire experts`}
-                />
-                <meta
-                    property="og:title"
-                    content={`Results for "${params.name}"`}
-                />
-                <meta
-                    property="og:description"
-                    content={`Find the best services related to "${params.name}". Hire experts in a variety of fields to get your work done.`}
-                />
-                <meta
-                    property="og:image"
-                    content="https://via.placeholder.com/600x400" // Replace with your relevant image
-                />
-                <meta property="og:url" content={window.location.href} />
-                <meta property="og:type" content="website" />
-            </Helmet> */}
             <section className="result">
                 <div className="container">
                     <div className="result-title">
